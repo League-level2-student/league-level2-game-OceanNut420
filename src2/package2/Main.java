@@ -1,4 +1,6 @@
-package packaj;
+package package2;
+
+
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,8 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -17,6 +21,10 @@ import javax.swing.Timer;
 public class Main extends JPanel implements ActionListener, KeyListener{
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
+	
+	public static BufferedImage image;
+	public static boolean needImage = true;
+	public static boolean gotImage = false;	
 	
 	JFrame window;
 	Timer timer;
@@ -39,11 +47,12 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		window.pack();
 		timer = new Timer(1000 / 60, this);
 		
+		//loadImage ("waa waa wawawa waaa.jpeg");
 		
-		platforms.add(new Platform(300, 450, 200, 50));
-		platforms.add(new Platform(500, 350, 200, 50));
-		platforms.add(new Platform(300, 250, 200, 50));
-		platforms.add(new Platform(100, 150, 200, 50));
+		//platforms.add(new Platform(300, 450, 200, 50));
+		platforms.add(new Platform(500, 310, 200, 50));
+		//platforms.add(new Platform(300, 250, 200, 50));
+		platforms.add(new Platform(50, 100, 200, 50));
 		
 		timer.start();
 		
@@ -93,6 +102,18 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 		}
 	}
 	
+	void loadImage(String imageFile) {
+	    if (needImage) {
+	        try {
+	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+		    gotImage = true;
+	        } catch (Exception e) {
+	            
+	        }
+	        needImage = false;
+	    }
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -101,15 +122,19 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		if(e.getKeyCode() == KeyEvent.VK_LEFT){
+		if(e.getKeyCode() == KeyEvent.VK_A){
 			p1.left = true;
 		}
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+		if(e.getKeyCode() == KeyEvent.VK_D){
 			p1.right = true;
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_SPACE){
 			p1.jump();
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_W){
+			p1.tech();
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
@@ -121,10 +146,10 @@ public class Main extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getKeyCode() == KeyEvent.VK_LEFT){
+		if(e.getKeyCode() == KeyEvent.VK_A){
 			p1.left = false;
 		}
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+		if(e.getKeyCode() == KeyEvent.VK_D){
 			p1.right = false;
 		}
 	}
@@ -206,6 +231,10 @@ class Player{
 		}
 	}
 	
+	public void tech(){
+			y = y - 100;
+	}
+	
 	public void update(){
 		if(left){
 			x -= xVelocity;
@@ -228,6 +257,7 @@ class Player{
 	
 	public void draw(Graphics g){
 		g.setColor(Color.BLUE);
+		//g.drawImage(image, x, y, width, height, null);
 		g.fillRect(x, y, width, height);
 	}
 	
